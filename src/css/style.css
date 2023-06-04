@@ -1,0 +1,46 @@
+body {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #ffffff;
+}
+
+p {
+    color: #c0c0c0;
+}
+
+textarea,
+input[type="text"] {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border: 1px solid #3f3f3f;
+}
+
+button {
+    background-color: #4f4f4f;
+    color: #e0e0e0;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #6f6f6f;
+}
+
+textarea#template,
+textarea#notes,
+textarea#filled-template {
+    width: 100%;
+    min-height: 200px;
+    resize: vertical;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+}

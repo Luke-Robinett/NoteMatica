@@ -15,7 +15,9 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api", async (req, res) => {
-    const { prompt } = req.body;
+    const { template, rawNotes } = req.body;
+
+    const prompt = createPrompt(template, rawNotes);
 
     try {
         const response = await sendAPIRequest(prompt);
@@ -33,6 +35,11 @@ app.post("/api", async (req, res) => {
         }
     }
 });
+
+function createPrompt(template, rawNotes) {
+    const instructions = "Fill in the provided template with the supplied note data. Be concise, using lists when appropriate.";
+    return `${instructions}\n\nTemplate:\n${template}\n\nNotes:\n${rawNotes}`;
+}
 
 async function sendAPIRequest(prompt) {
     const endpoint = "https://api.openai.com/v1/chat/completions";

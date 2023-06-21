@@ -8,10 +8,9 @@ $(document).ready(function () {
 
         const template = $("#template").val();
         const rawNotes = $("#rawNotes").val();
-        const prompt = createPrompt(template, rawNotes);
 
         try {
-            const filledTemplate = await formatNote(prompt);
+            const filledTemplate = await formatNote(template, rawNotes);
             $("#filledTemplate").val(filledTemplate);
         } catch (error) {
             console.error(error);
@@ -41,19 +40,14 @@ function stopPencilSound() {
     pencilSound.currentTime = 0;
 }
 
-function createPrompt(template, rawNotes) {
-    const instructions = "Fill in the provided template with the supplied note data. Be concise, using lists when appropriate.";
-    return `${instructions}\n\nTemplate:\n${template}\n\nNotes:\n${rawNotes}`;
-}
-
-async function formatNote(prompt) {
+async function formatNote(template, rawNotes) {
     try {
         const response = await $.ajax({
             url: "/api",
             type: "POST",
             dataType: "json",
             contentType: "application/json",
-            data: JSON.stringify({ prompt })
+            data: JSON.stringify({ template, rawNotes })
         });
 
         return response.filledTemplate;

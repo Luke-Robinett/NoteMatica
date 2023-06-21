@@ -1,40 +1,34 @@
-const fillButton = document.querySelector("#fillButton");
-const templateTextArea = document.querySelector("#template");
-const rawNotesTextArea = document.querySelector("#rawNotes");
-const filledTemplateTextArea = document.querySelector("#filledTemplate");
-
 const pageSound = new Audio("media/page-turn.mp3");
 const pencilSound = new Audio("media/pencil.mp3");
 
-fillButton.addEventListener("click", async () => {
-    disableButton();
-    playPencilSound();
+$(document).ready(function () {
+    $("#fillButton").on("click", async function () {
+        disableButton();
+        playPencilSound();
 
-    const template = templateTextArea.value;
-    const rawNotes = rawNotesTextArea.value;
+        const template = $("#template").val();
+        const rawNotes = $("#rawNotes").val();
+        const prompt = createPrompt(template, rawNotes);
 
-    const prompt = createPrompt(template, rawNotes);
-
-    try {
-        const filledTemplate = await formatNote(prompt);
-        filledTemplateTextArea.value = filledTemplate;
-    } catch (error) {
-        console.error(error);
-    } finally {
-        enableButton();
-        stopPencilSound();
-        pageSound.play();
-    }
+        try {
+            const filledTemplate = await formatNote(prompt);
+            $("#filledTemplate").val(filledTemplate);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            enableButton();
+            stopPencilSound();
+            pageSound.play();
+        }
+    });
 });
 
 function disableButton() {
-    fillButton.disabled = true;
-    fillButton.textContent = "Working...";
+    $("#fillButton").prop("disabled", true).text("Working...");
 }
 
 function enableButton() {
-    fillButton.disabled = false;
-    fillButton.textContent = "Fill It Out!";
+    $("#fillButton").prop("disabled", false).text("Fill It Out!");
 }
 
 function playPencilSound() {
@@ -54,16 +48,15 @@ function createPrompt(template, rawNotes) {
 
 async function formatNote(prompt) {
     try {
-        const response = await fetch("/api", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ prompt })
+        const response = await $.ajax({
+            url: "/api",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({ prompt })
         });
 
-        const data = await response.json();
-        return data.filledTemplate;
+        return response.filledTemplate;
     } catch (error) {
         console.error("Error calling local API:", error);
         throw error;

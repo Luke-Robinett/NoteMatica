@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 function createPrompt(template, rawNotes) {
-    const instructions = "Fill in the provided template with the supplied note data. Be concise, using lists when appropriate.";
+    const instructions = "Fill in the provided template with the supplied note data. Be concise. Do not add anything beyond what the template specifies. If you are unsure of how to fit something into the template, just make your best guess.";
     return `${instructions}\n\nTemplate:\n${template}\n\nNotes:\n${rawNotes}`;
 }
 
